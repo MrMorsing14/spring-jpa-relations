@@ -1,15 +1,25 @@
 package ek.osnb.jpa.orders.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import ek.osnb.jpa.common.model.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="orders")
 public class Order extends BaseEntity {
 
     private LocalDate orderDate;
     private OrderStatus status;
+
+    @JsonManagedReference
+    @OneToMany (mappedBy = "order")
+    private List<OrderLine> orderLines = new ArrayList<>();
 
     public Order() {
 
@@ -34,5 +44,29 @@ public class Order extends BaseEntity {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public List<OrderLine> getOrderLines() {
+        return orderLines;
+    }
+
+    public void setOrderLines(List<OrderLine> orderLines) {
+        this.orderLines = orderLines;
+    }
+
+    public void addOrderLine(OrderLine orderLine) {
+        orderLines.add(orderLine);
+        orderLine.addOrderLine(this);
+    }
+
+    public void removeOrderLine(OrderLine orderLine) {
+        orderLines.remove(orderLine);
+        orderLine.addOrderLine(null);
+    }
+
+    public void clearOrderLines() {
+        for (OrderLine orderLine : new ArrayList<>(orderLines)) {
+            removeOrderLine(orderLine);
+        }
     }
 }
