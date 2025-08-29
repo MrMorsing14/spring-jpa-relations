@@ -48,6 +48,11 @@ public class OrderServiceImpl implements OrderService {
             Order updatedOrder = existingOrder.get();
             updatedOrder.setOrderDate(order.getOrderDate());
             updatedOrder.setStatus(order.getStatus());
+
+            updatedOrder.clearOrderLines();
+            for (var line : order.getOrderLines()) {
+                updatedOrder.addOrderLine(line);
+            }
             // Update other fields as necessary
             return orderRepository.save(updatedOrder);
         }
