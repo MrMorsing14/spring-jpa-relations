@@ -1,14 +1,19 @@
 package ek.osnb.jpa.orders.model;
 
-import java.time.LocalDate;
+import ek.osnb.jpa.common.model.BaseEntity;
+import jakarta.persistence.*;
 
-public class Order {
+import java.time.LocalDate;
+@Entity
+@Table(name="orders")
+public class Order extends BaseEntity {
 
     private LocalDate orderDate;
-
     private OrderStatus status;
 
-    public Order() {}
+    public Order() {
+
+    }
 
     public Order(LocalDate orderDate, OrderStatus status) {
         this.orderDate = orderDate;
